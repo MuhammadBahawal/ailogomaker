@@ -4,17 +4,26 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android:dev": "react-native run-android --no-packager",
+    "android:ready": "node scripts/run-android-dev.js",
+    "dev:android": "node scripts/dev-android.js",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "start:reset": "react-native start --reset-cache",
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^3.0.1",
     "@react-native/new-app-screen": "0.84.0",
+    "base64-js": "^1.5.1",
+    "jpeg-js": "^0.4.4",
     "react": "19.2.3",
     "react-native": "0.84.0",
+    "react-native-image-picker": "^8.2.1",
     "react-native-safe-area-context": "^5.5.2",
-    "react-native-svg": "^15.15.3"
+    "react-native-svg": "^15.15.3",
+    "upng-js": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

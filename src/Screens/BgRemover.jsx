@@ -1,32 +1,93 @@
 import React, {useState} from 'react';
-import {Alert, Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ArrowLeftIcon from '../assets/icons/arrow-left.svg';
 import BgRemoverPreview from '../Components/BgRemoverPreview';
 import GradientLayer from '../Components/GradientLayer';
+import {
+  pickerImageOptions,
+  removePickedImageBackground,
+} from '../utils/aiImageProcessing';
+import {pickSingleImageWithConsent} from '../utils/photoPickerAccess';
 
 const BgRemover = ({onBack}) => {
-  const [stage, setStage] = useState('upload');
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [removedImageUri, setRemovedImageUri] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const hasSelectedImage = Boolean(selectedAsset?.uri);
 
-  const handlePrimaryAction = () => {
-    if (stage === 'upload') {
-      setStage('ready');
+  const handleSelectImage = async () => {
+    if (isProcessing) {
       return;
     }
 
-    if (stage === 'ready') {
-      setStage('removed');
+    try {
+      const response = await pickSingleImageWithConsent(pickerImageOptions);
+
+      if (response.didCancel) {
+        return;
+      }
+
+      if (response.errorCode) {
+        Alert.alert(
+          'Upload failed',
+          response.errorMessage ?? 'Something went wrong while selecting the image.',
+        );
+        return;
+      }
+
+      const asset = response.assets?.[0];
+
+      if (!asset?.uri || !asset?.base64) {
+        Alert.alert(
+          'Upload failed',
+          'Could not prepare the selected image for background removal.',
+        );
+        return;
+      }
+
+      setSelectedAsset(asset);
+      setRemovedImageUri(null);
+    } catch (error) {
+      console.error('Image picker failed', error);
+      Alert.alert('Upload failed', 'Could not open the image picker.');
+    }
+  };
+
+  const handleRemoveBackground = async () => {
+    if (!selectedAsset) {
+      await handleSelectImage();
       return;
     }
 
-    Alert.alert('Download', 'Background removed image export integration abhi connect nahi hui.');
+    try {
+      setIsProcessing(true);
+      const result = await removePickedImageBackground(selectedAsset);
+      setRemovedImageUri(result.uri);
+    } catch (error) {
+      console.error('Background removal failed', error);
+      Alert.alert(
+        'BG Remove failed',
+        'The selected image could not be processed on this device.',
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const buttonLabelByStage = {
-    upload: 'Upload Your Image',
-    ready: 'BG Remove',
-    removed: 'Download',
-  };
+  const primaryLabel = !hasSelectedImage
+    ? 'Upload Your Image'
+    : isProcessing
+      ? 'Removing...'
+      : 'BG Remove';
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -40,17 +101,37 @@ const BgRemover = ({onBack}) => {
         </View>
 
         <View style={styles.previewWrap}>
-          <BgRemoverPreview stage={stage} />
+          <BgRemoverPreview
+            imageUri={selectedAsset?.uri}
+            removedImageUri={removedImageUri}
+          />
         </View>
 
-        <Pressable onPress={handlePrimaryAction} style={styles.primaryButton}>
+        <Pressable
+          disabled={isProcessing}
+          onPress={hasSelectedImage ? handleRemoveBackground : handleSelectImage}
+          style={[styles.primaryButton, isProcessing && styles.buttonDisabled]}>
           <GradientLayer
             borderRadius={26}
             colors={['#F2A53B', '#D93D9E']}
             gradientId="bg-remover-primary"
           />
-          <Text style={styles.primaryLabel}>{buttonLabelByStage[stage]}</Text>
+          <View style={styles.buttonContent}>
+            {isProcessing ? (
+              <ActivityIndicator color="#FFFFFF" size="small" style={styles.loader} />
+            ) : null}
+            <Text style={styles.primaryLabel}>{primaryLabel}</Text>
+          </View>
         </Pressable>
+
+        {hasSelectedImage ? (
+          <Pressable
+            disabled={isProcessing}
+            onPress={handleSelectImage}
+            style={[styles.secondaryButton, isProcessing && styles.buttonDisabled]}>
+            <Text style={styles.secondaryLabel}>Change Image</Text>
+          </Pressable>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -66,6 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 8,
     paddingTop: 6,
+    paddingBottom: 22,
   },
   headerRow: {
     flexDirection: 'row',
@@ -90,19 +172,44 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     marginHorizontal: 8,
-    marginBottom: 26,
     height: 52,
     borderRadius: 26,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonDisabled: {
+    opacity: 0.8,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
+  loader: {
+    marginRight: 8,
+  },
   primaryLabel: {
     color: '#FFFFFF',
     fontSize: 17,
     lineHeight: 20,
     fontWeight: '700',
-    zIndex: 1,
+  },
+  secondaryButton: {
+    marginTop: 12,
+    marginHorizontal: 8,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#6B6A70',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  secondaryLabel: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    lineHeight: 19,
+    fontWeight: '700',
   },
 });
 

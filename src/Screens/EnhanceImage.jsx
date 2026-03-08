@@ -1,26 +1,91 @@
 import React, {useState} from 'react';
-import {Alert, Pressable, ScrollView, Share, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ArrowLeftIcon from '../assets/icons/arrow-left.svg';
 import EnhancePreview from '../Components/EnhancePreview';
 import GradientLayer from '../Components/GradientLayer';
+import {enhancePickedImage, pickerImageOptions} from '../utils/aiImageProcessing';
+import {pickSingleImageWithConsent} from '../utils/photoPickerAccess';
 
 const EnhanceImage = ({onBack}) => {
-  const [hasEnhancedImage, setHasEnhancedImage] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [enhancedImageUri, setEnhancedImageUri] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const hasSelectedImage = Boolean(selectedAsset?.uri);
 
-  const handleUpload = () => {
-    setHasEnhancedImage(true);
+  const handleSelectImage = async () => {
+    if (isProcessing) {
+      return;
+    }
+
+    try {
+      const response = await pickSingleImageWithConsent(pickerImageOptions);
+
+      if (response.didCancel) {
+        return;
+      }
+
+      if (response.errorCode) {
+        Alert.alert(
+          'Upload failed',
+          response.errorMessage ?? 'Something went wrong while selecting the image.',
+        );
+        return;
+      }
+
+      const asset = response.assets?.[0];
+
+      if (!asset?.uri || !asset?.base64) {
+        Alert.alert(
+          'Upload failed',
+          'Could not prepare the selected image for enhancement.',
+        );
+        return;
+      }
+
+      setSelectedAsset(asset);
+      setEnhancedImageUri(null);
+    } catch (error) {
+      console.error('Image picker failed', error);
+      Alert.alert('Upload failed', 'Could not open the image picker.');
+    }
   };
 
-  const handleDownload = () => {
-    Alert.alert('Download', 'Enhanced image export integration abhi connect nahi hui.');
+  const handleEnhanceImage = async () => {
+    if (!selectedAsset) {
+      await handleSelectImage();
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      const result = await enhancePickedImage(selectedAsset);
+      setEnhancedImageUri(result.uri);
+    } catch (error) {
+      console.error('Enhance image failed', error);
+      Alert.alert(
+        'Enhance failed',
+        'The selected image could not be enhanced on this device.',
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const handleShare = async () => {
-    await Share.share({
-      message: 'Enhanced image is ready to share.',
-    });
-  };
+  const primaryLabel = !hasSelectedImage
+    ? 'Upload Your Image'
+    : isProcessing
+      ? 'Enhancing...'
+      : 'Enhance Image';
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -37,33 +102,37 @@ const EnhanceImage = ({onBack}) => {
           </View>
 
           <View style={styles.previewShell}>
-            <EnhancePreview processed={hasEnhancedImage} />
+            <EnhancePreview
+              enhancedImageUri={enhancedImageUri}
+              imageUri={selectedAsset?.uri}
+            />
           </View>
 
-          {hasEnhancedImage ? (
-            <View style={styles.actionStack}>
-              <Pressable onPress={handleDownload} style={styles.primaryButton}>
-                <GradientLayer
-                  borderRadius={30}
-                  colors={['#F2A53B', '#D93D9E']}
-                  gradientId="enhance-download"
-                />
-                <Text style={styles.primaryLabel}>Download</Text>
-              </Pressable>
-              <Pressable onPress={handleShare} style={styles.secondaryButton}>
-                <Text style={styles.secondaryLabel}>Share</Text>
-              </Pressable>
+          <Pressable
+            disabled={isProcessing}
+            onPress={hasSelectedImage ? handleEnhanceImage : handleSelectImage}
+            style={[styles.primaryButton, isProcessing && styles.buttonDisabled]}>
+            <GradientLayer
+              borderRadius={30}
+              colors={['#F2A53B', '#D93D9E']}
+              gradientId="enhance-primary"
+            />
+            <View style={styles.buttonContent}>
+              {isProcessing ? (
+                <ActivityIndicator color="#FFFFFF" size="small" style={styles.loader} />
+              ) : null}
+              <Text style={styles.primaryLabel}>{primaryLabel}</Text>
             </View>
-          ) : (
-            <Pressable onPress={handleUpload} style={styles.primaryButton}>
-              <GradientLayer
-                borderRadius={30}
-                colors={['#F2A53B', '#D93D9E']}
-                gradientId="enhance-upload"
-              />
-              <Text style={styles.primaryLabel}>Upload Your Image</Text>
+          </Pressable>
+
+          {hasSelectedImage ? (
+            <Pressable
+              disabled={isProcessing}
+              onPress={handleSelectImage}
+              style={[styles.secondaryButton, isProcessing && styles.buttonDisabled]}>
+              <Text style={styles.secondaryLabel}>Change Image</Text>
             </Pressable>
-          )}
+          ) : null}
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -78,8 +147,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#0C8CFF',
   },
   scrollContent: {
     paddingHorizontal: 10,
@@ -107,9 +174,6 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginHorizontal: 6,
   },
-  actionStack: {
-    marginTop: 14,
-  },
   primaryButton: {
     marginTop: 18,
     marginHorizontal: 46,
@@ -119,12 +183,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonDisabled: {
+    opacity: 0.8,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
+  loader: {
+    marginRight: 8,
+  },
   primaryLabel: {
     color: '#FFFFFF',
     fontSize: 17,
     lineHeight: 20,
     fontWeight: '700',
-    zIndex: 1,
   },
   secondaryButton: {
     marginTop: 12,
