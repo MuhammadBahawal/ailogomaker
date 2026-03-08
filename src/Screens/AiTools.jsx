@@ -11,9 +11,15 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PremiumIcon from '../assets/icons/premium.svg';
 import SettingsIcon from '../assets/icons/settings.svg';
+<<<<<<< HEAD
 import BgRemoverToolCell from '../assets/images/bgremoverToolCell.svg';
 import EnhanceToolCell from '../assets/images/enhanceToolCell.svg';
 import UpscaleToolCell from '../assets/images/upscaleToolCell.svg';
+=======
+import FlatPreview from '../assets/previews/flat-preview.svg';
+import MinimalPreview from '../assets/previews/minimal-preview.svg';
+import SoftPreview from '../assets/previews/soft-preview.svg';
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 import BottomTabBar from '../Components/BottomTabBar';
 import GradientLayer from '../Components/GradientLayer';
 import RoundIconButton from '../Components/RoundIconButton';
@@ -23,15 +29,23 @@ const aiTools = [
     id: 'upscale',
     title: 'Upscale',
     colors: ['#F46C6B', '#FF7D65'],
+<<<<<<< HEAD
     exploreColor: '#F06B62',
     ShowcaseArt: UpscaleToolCell,
     showcaseHeight: 81,
     showcaseWidth: 134,
+=======
+    largeFrame: '#F8C0AD',
+    smallFrame: '#442B2E',
+    MainPreview: FlatPreview,
+    SmallPreview: MinimalPreview,
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   },
   {
     id: 'enhance',
     title: 'Enhance Image',
     colors: ['#7F5BFF', '#4D83FF'],
+<<<<<<< HEAD
     exploreColor: '#6A62FF',
     ShowcaseArt: EnhanceToolCell,
     showcaseHeight: 81,
@@ -56,6 +70,46 @@ const ToolShowcase = ({ShowcaseArt, showcaseHeight, showcaseWidth}) => {
         preserveAspectRatio="xMidYMid meet"
         width={showcaseWidth}
       />
+=======
+    largeFrame: '#E8D8C0',
+    smallFrame: '#3858A6',
+    MainPreview: SoftPreview,
+    SmallPreview: FlatPreview,
+  },
+  {
+    id: 'bg-remover',
+    title: 'BG Remover',
+    colors: ['#F8C31A', '#FF9500'],
+    largeFrame: '#FFE2D9',
+    smallFrame: '#D94A5C',
+    MainPreview: FlatPreview,
+    SmallPreview: SoftPreview,
+  },
+];
+
+const ToolShowcase = ({MainPreview, SmallPreview, largeFrame, smallFrame}) => {
+  return (
+    <View style={styles.showcaseWrap}>
+      <View
+        style={[
+          styles.smallTile,
+          styles.smallTileLeft,
+          {backgroundColor: smallFrame},
+        ]}>
+        <SmallPreview height={44} width={34} />
+      </View>
+      <View
+        style={[
+          styles.smallTile,
+          styles.smallTileCenter,
+          styles.smallTileCenterSurface,
+        ]}>
+        <MainPreview height={42} width={30} />
+      </View>
+      <View style={[styles.largeTile, {backgroundColor: largeFrame}]}>
+        <MainPreview height={68} width={52} />
+      </View>
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
     </View>
   );
 };
@@ -75,6 +129,7 @@ const ToolCard = ({onPress, tool}) => {
             Stunning Design Templates for{'\n'}Cricut Machine
           </Text>
           <Pressable onPress={() => onPress?.(tool.id)} style={styles.exploreButton}>
+<<<<<<< HEAD
             <Text style={[styles.exploreLabel, {color: tool.exploreColor}]}>Explore</Text>
             <Text style={[styles.exploreArrow, {color: tool.exploreColor}]}>{'>'}</Text>
           </Pressable>
@@ -83,6 +138,17 @@ const ToolCard = ({onPress, tool}) => {
           ShowcaseArt={tool.ShowcaseArt}
           showcaseHeight={tool.showcaseHeight}
           showcaseWidth={tool.showcaseWidth}
+=======
+            <Text style={styles.exploreLabel}>Explore</Text>
+            <Text style={styles.exploreArrow}>{'>'}</Text>
+          </Pressable>
+        </View>
+        <ToolShowcase
+          MainPreview={tool.MainPreview}
+          SmallPreview={tool.SmallPreview}
+          largeFrame={tool.largeFrame}
+          smallFrame={tool.smallFrame}
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
         />
       </View>
     </Pressable>
@@ -208,8 +274,12 @@ const styles = StyleSheet.create({
     minHeight: 118,
     borderRadius: 12,
     overflow: 'hidden',
+<<<<<<< HEAD
     paddingLeft: 10,
     paddingRight: 8,
+=======
+    paddingHorizontal: 10,
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -246,11 +316,16 @@ const styles = StyleSheet.create({
     fontSize: 9.5,
     lineHeight: 11,
     fontWeight: '700',
+<<<<<<< HEAD
+=======
+    color: '#F06B62',
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   },
   exploreArrow: {
     marginLeft: 3,
     fontSize: 10,
     lineHeight: 11,
+<<<<<<< HEAD
     fontWeight: '700',
   },
   showcaseWrap: {
@@ -260,6 +335,51 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
+=======
+    color: '#F06B62',
+    fontWeight: '700',
+  },
+  showcaseWrap: {
+    width: 88,
+    height: 94,
+    position: 'relative',
+    marginLeft: 8,
+  },
+  largeTile: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: 44,
+    height: 94,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  smallTile: {
+    position: 'absolute',
+    width: 26,
+    height: 40,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  smallTileLeft: {
+    left: 10,
+    bottom: 0,
+    transform: [{rotate: '-18deg'}],
+  },
+  smallTileCenter: {
+    left: 30,
+    bottom: 2,
+  },
+  smallTileCenterSurface: {
+    backgroundColor: '#FFFFFF',
+  },
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 });
 
 export default AiTools;

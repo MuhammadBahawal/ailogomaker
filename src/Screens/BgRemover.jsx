@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+<<<<<<< HEAD
 import {
   ActivityIndicator,
   Alert,
@@ -8,10 +9,14 @@ import {
   Text,
   View,
 } from 'react-native';
+=======
+import {Alert, Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 import {SafeAreaView} from 'react-native-safe-area-context';
 import ArrowLeftIcon from '../assets/icons/arrow-left.svg';
 import BgRemoverPreview from '../Components/BgRemoverPreview';
 import GradientLayer from '../Components/GradientLayer';
+<<<<<<< HEAD
 import {
   pickerImageOptions,
   removePickedImageBackground,
@@ -88,6 +93,31 @@ const BgRemover = ({onBack}) => {
     : isProcessing
       ? 'Removing...'
       : 'BG Remove';
+=======
+
+const BgRemover = ({onBack}) => {
+  const [stage, setStage] = useState('upload');
+
+  const handlePrimaryAction = () => {
+    if (stage === 'upload') {
+      setStage('ready');
+      return;
+    }
+
+    if (stage === 'ready') {
+      setStage('removed');
+      return;
+    }
+
+    Alert.alert('Download', 'Background removed image export integration abhi connect nahi hui.');
+  };
+
+  const buttonLabelByStage = {
+    upload: 'Upload Your Image',
+    ready: 'BG Remove',
+    removed: 'Download',
+  };
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -101,6 +131,7 @@ const BgRemover = ({onBack}) => {
         </View>
 
         <View style={styles.previewWrap}>
+<<<<<<< HEAD
           <BgRemoverPreview
             imageUri={selectedAsset?.uri}
             removedImageUri={removedImageUri}
@@ -111,11 +142,18 @@ const BgRemover = ({onBack}) => {
           disabled={isProcessing}
           onPress={hasSelectedImage ? handleRemoveBackground : handleSelectImage}
           style={[styles.primaryButton, isProcessing && styles.buttonDisabled]}>
+=======
+          <BgRemoverPreview stage={stage} />
+        </View>
+
+        <Pressable onPress={handlePrimaryAction} style={styles.primaryButton}>
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
           <GradientLayer
             borderRadius={26}
             colors={['#F2A53B', '#D93D9E']}
             gradientId="bg-remover-primary"
           />
+<<<<<<< HEAD
           <View style={styles.buttonContent}>
             {isProcessing ? (
               <ActivityIndicator color="#FFFFFF" size="small" style={styles.loader} />
@@ -132,6 +170,10 @@ const BgRemover = ({onBack}) => {
             <Text style={styles.secondaryLabel}>Change Image</Text>
           </Pressable>
         ) : null}
+=======
+          <Text style={styles.primaryLabel}>{buttonLabelByStage[stage]}</Text>
+        </Pressable>
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
       </View>
     </SafeAreaView>
   );
@@ -147,7 +189,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 8,
     paddingTop: 6,
+<<<<<<< HEAD
     paddingBottom: 22,
+=======
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   },
   headerRow: {
     flexDirection: 'row',
@@ -172,12 +217,17 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     marginHorizontal: 8,
+<<<<<<< HEAD
+=======
+    marginBottom: 26,
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
     height: 52,
     borderRadius: 26,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
+<<<<<<< HEAD
   buttonDisabled: {
     opacity: 0.8,
   },
@@ -190,11 +240,14 @@ const styles = StyleSheet.create({
   loader: {
     marginRight: 8,
   },
+=======
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   primaryLabel: {
     color: '#FFFFFF',
     fontSize: 17,
     lineHeight: 20,
     fontWeight: '700',
+<<<<<<< HEAD
   },
   secondaryButton: {
     marginTop: 12,
@@ -210,6 +263,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontWeight: '700',
+=======
+    zIndex: 1,
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   },
 });
 

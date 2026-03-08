@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import {Pressable, StyleSheet, View} from 'react-native';
 import Svg, {
   Defs,
@@ -66,14 +67,50 @@ const TabLabel = ({active, label, tabId}) => {
     </View>
   );
 };
+=======
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import HistoryTabIcon from '../assets/icons/history-tab.svg';
+import LogoTabIcon from '../assets/icons/logo-tab.svg';
+import ToolsTabIcon from '../assets/icons/tools-tab.svg';
+import {bottomTabs} from '../data/logoMaker';
+
+const ICON_FRAME_WIDTH = 32;
+const ICON_FRAME_HEIGHT = 18;
+
+const iconConfigByTab = {
+  logo: {
+    Icon: LogoTabIcon,
+    width: 30,
+    height: 17,
+  },
+  tools: {
+    Icon: ToolsTabIcon,
+    width: 17,
+    height: 17,
+  },
+  history: {
+    Icon: HistoryTabIcon,
+    width: 17,
+    height: 17,
+  },
+};
+
+const ACTIVE_TAB_COLOR = '#F5A035';
+const INACTIVE_TAB_COLOR = '#000000';
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 
 const BottomTabBar = ({activeTab = 'logo', onTabChange}) => {
   return (
     <View style={styles.tabBar}>
       {bottomTabs.map(tab => {
         const active = activeTab === tab.id;
+<<<<<<< HEAD
         const IconSet = iconsByTab[tab.id];
         const Icon = active ? IconSet.active : IconSet.inactive;
+=======
+        const tabColor = active ? ACTIVE_TAB_COLOR : INACTIVE_TAB_COLOR;
+        const {Icon, ...iconSize} = iconConfigByTab[tab.id];
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 
         return (
           <Pressable
@@ -81,9 +118,17 @@ const BottomTabBar = ({activeTab = 'logo', onTabChange}) => {
             onPress={() => onTabChange?.(tab.id)}
             style={styles.tabButton}>
             <View style={styles.iconFrame}>
+<<<<<<< HEAD
               <Icon height={ICON_SIZE} width={ICON_SIZE} />
             </View>
             <TabLabel active={active} label={tab.label} tabId={tab.id} />
+=======
+              <Icon color={tabColor} {...iconSize} />
+            </View>
+            <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
+              {tab.label}
+            </Text>
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
           </Pressable>
         );
       })}
@@ -108,6 +153,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconFrame: {
+<<<<<<< HEAD
     width: ICON_FRAME_SIZE,
     height: ICON_FRAME_SIZE,
     alignItems: 'center',
@@ -117,6 +163,23 @@ const styles = StyleSheet.create({
     marginTop: 4,
     width: '100%',
     height: LABEL_HEIGHT,
+=======
+    width: ICON_FRAME_WIDTH,
+    height: ICON_FRAME_HEIGHT,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabLabel: {
+    marginTop: 4,
+    fontSize: 12,
+    lineHeight: 15,
+    fontWeight: '500',
+    color: INACTIVE_TAB_COLOR,
+  },
+  tabLabelActive: {
+    color: ACTIVE_TAB_COLOR,
+    fontWeight: '700',
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   },
 });
 

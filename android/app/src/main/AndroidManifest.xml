@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+=======
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,6 +16,7 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="${usesCleartextTraffic}"
       android:supportsRtl="true">
+<<<<<<< HEAD
       <service
         android:name="com.google.android.gms.metadata.ModuleDependencies"
         android:enabled="false"
@@ -24,6 +29,8 @@
           android:name="photopicker_activity:0:required"
           android:value="" />
       </service>
+=======
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

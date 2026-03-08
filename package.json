@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+<<<<<<< HEAD
     "android:dev": "react-native run-android --no-packager",
     "android:ready": "node scripts/run-android-dev.js",
     "dev:android": "node scripts/dev-android.js",
@@ -24,6 +25,19 @@
     "react-native-safe-area-context": "^5.5.2",
     "react-native-svg": "^15.15.3",
     "upng-js": "^2.1.0"
+=======
+    "ios": "react-native run-ios",
+    "lint": "eslint .",
+    "start": "react-native start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@react-native/new-app-screen": "0.84.0",
+    "react": "19.2.3",
+    "react-native": "0.84.0",
+    "react-native-safe-area-context": "^5.5.2",
+    "react-native-svg": "^15.15.3"
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

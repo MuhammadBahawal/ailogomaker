@@ -1,9 +1,12 @@
 package com.ailogomaker
 
 import android.os.Bundle
+<<<<<<< HEAD
 import android.os.Handler
 import android.os.Looper
 import androidx.core.view.ViewCompat
+=======
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -13,6 +16,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 class MainActivity : ReactActivity() {
+<<<<<<< HEAD
   private val hideNavigationHandler = Handler(Looper.getMainLooper())
   private val hideNavigationRunnable = Runnable { hideSystemNavigationBar() }
 
@@ -30,6 +34,13 @@ class MainActivity : ReactActivity() {
 
       insets
     }
+=======
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    hideSystemNavigationBar()
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   }
 
   /**
@@ -47,6 +58,7 @@ class MainActivity : ReactActivity() {
 
   override fun onResume() {
     super.onResume()
+<<<<<<< HEAD
     scheduleHideSystemNavigationBar()
   }
 
@@ -73,6 +85,9 @@ class MainActivity : ReactActivity() {
     } else {
       hideNavigationHandler.postDelayed(hideNavigationRunnable, delayMillis)
     }
+=======
+    hideSystemNavigationBar()
+>>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   }
 
   private fun hideSystemNavigationBar() {
