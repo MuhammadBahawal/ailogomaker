@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert, Platform} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const PHOTO_PICKER_CONSENT_KEY = '@ai-logo-maker/photo-picker-consent-v1';
 
@@ -110,4 +110,59 @@ export const pickSingleImageWithConsent = async options => {
   }
 
   return launchImageLibrary(options);
+};
+
+const promptForImageSource = () => {
+  return new Promise(resolve => {
+    let settled = false;
+
+    const finish = source => {
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+      resolve(source);
+    };
+
+    Alert.alert(
+      'Select Image',
+      'Choose source',
+      [
+        {
+          text: 'Gallery',
+          onPress: () => finish('gallery'),
+        },
+        {
+          text: 'Camera',
+          onPress: () => finish('camera'),
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => finish(null),
+        },
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => finish(null),
+      },
+    );
+  });
+};
+
+export const pickSingleImageWithPrompt = async options => {
+  const source = await promptForImageSource();
+
+  if (!source) {
+    return {
+      didCancel: true,
+    };
+  }
+
+  if (source === 'camera') {
+    return launchCamera(options);
+  }
+
+  return pickSingleImageWithConsent(options);
 };

@@ -180,14 +180,23 @@ async function main() {
   const child = isWindows
     ? spawn(
         process.env.ComSpec || 'cmd.exe',
-        ['/d', '/s', '/c', `${npxCommand} react-native run-android --no-packager --device ${deviceId}`],
+        [
+          '/d',
+          '/s',
+          '/c',
+          `${npxCommand} react-native run-android --no-packager --active-arch-only --device ${deviceId}`,
+        ],
         {
           stdio: 'inherit',
         },
       )
-    : spawn(npxCommand, ['react-native', 'run-android', '--no-packager', '--device', deviceId], {
-        stdio: 'inherit',
-      });
+    : spawn(
+        npxCommand,
+        ['react-native', 'run-android', '--no-packager', '--active-arch-only', '--device', deviceId],
+        {
+          stdio: 'inherit',
+        },
+      );
 
   child.on('exit', code => {
     process.exit(code ?? 1);

@@ -11,15 +11,9 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PremiumIcon from '../assets/icons/premium.svg';
 import SettingsIcon from '../assets/icons/settings.svg';
-<<<<<<< HEAD
 import BgRemoverToolCell from '../assets/images/bgremoverToolCell.svg';
 import EnhanceToolCell from '../assets/images/enhanceToolCell.svg';
 import UpscaleToolCell from '../assets/images/upscaleToolCell.svg';
-=======
-import FlatPreview from '../assets/previews/flat-preview.svg';
-import MinimalPreview from '../assets/previews/minimal-preview.svg';
-import SoftPreview from '../assets/previews/soft-preview.svg';
->>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 import BottomTabBar from '../Components/BottomTabBar';
 import GradientLayer from '../Components/GradientLayer';
 import RoundIconButton from '../Components/RoundIconButton';
@@ -28,88 +22,39 @@ const aiTools = [
   {
     id: 'upscale',
     title: 'Upscale',
+    subtitle: 'Stunning Design Templates for\nCricut Machine',
     colors: ['#F46C6B', '#FF7D65'],
-<<<<<<< HEAD
     exploreColor: '#F06B62',
-    ShowcaseArt: UpscaleToolCell,
-    showcaseHeight: 81,
-    showcaseWidth: 134,
-=======
-    largeFrame: '#F8C0AD',
-    smallFrame: '#442B2E',
-    MainPreview: FlatPreview,
-    SmallPreview: MinimalPreview,
->>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
+    CellArt: UpscaleToolCell,
+    artWidth: 124,
+    artHeight: 75,
   },
   {
     id: 'enhance',
     title: 'Enhance Image',
+    subtitle: 'Stunning Design Templates for\nCricut Machine',
     colors: ['#7F5BFF', '#4D83FF'],
-<<<<<<< HEAD
     exploreColor: '#6A62FF',
-    ShowcaseArt: EnhanceToolCell,
-    showcaseHeight: 81,
-    showcaseWidth: 134,
-  },
-  {
-    id: 'bg-remover',
-    title: 'BG Remove',
-    colors: ['#F8C31A', '#FF9500'],
-    exploreColor: '#F3AB00',
-    ShowcaseArt: BgRemoverToolCell,
-    showcaseHeight: 92,
-    showcaseWidth: 121,
-  },
-];
-
-const ToolShowcase = ({ShowcaseArt, showcaseHeight, showcaseWidth}) => {
-  return (
-    <View style={styles.showcaseWrap}>
-      <ShowcaseArt
-        height={showcaseHeight}
-        preserveAspectRatio="xMidYMid meet"
-        width={showcaseWidth}
-      />
-=======
-    largeFrame: '#E8D8C0',
-    smallFrame: '#3858A6',
-    MainPreview: SoftPreview,
-    SmallPreview: FlatPreview,
+    CellArt: EnhanceToolCell,
+    artWidth: 124,
+    artHeight: 75,
   },
   {
     id: 'bg-remover',
     title: 'BG Remover',
+    subtitle: 'Stunning Design Templates for\nCricut Machine',
     colors: ['#F8C31A', '#FF9500'],
-    largeFrame: '#FFE2D9',
-    smallFrame: '#D94A5C',
-    MainPreview: FlatPreview,
-    SmallPreview: SoftPreview,
+    exploreColor: '#F3AB00',
+    CellArt: BgRemoverToolCell,
+    artWidth: 128,
+    artHeight: 97,
   },
 ];
 
-const ToolShowcase = ({MainPreview, SmallPreview, largeFrame, smallFrame}) => {
+const ToolShowcase = ({CellArt, artHeight, artWidth}) => {
   return (
     <View style={styles.showcaseWrap}>
-      <View
-        style={[
-          styles.smallTile,
-          styles.smallTileLeft,
-          {backgroundColor: smallFrame},
-        ]}>
-        <SmallPreview height={44} width={34} />
-      </View>
-      <View
-        style={[
-          styles.smallTile,
-          styles.smallTileCenter,
-          styles.smallTileCenterSurface,
-        ]}>
-        <MainPreview height={42} width={30} />
-      </View>
-      <View style={[styles.largeTile, {backgroundColor: largeFrame}]}>
-        <MainPreview height={68} width={52} />
-      </View>
->>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
+      <CellArt height={artHeight} width={artWidth} />
     </View>
   );
 };
@@ -125,30 +70,16 @@ const ToolCard = ({onPress, tool}) => {
         />
         <View style={styles.cardCopy}>
           <Text style={styles.cardTitle}>{tool.title}</Text>
-          <Text style={styles.cardSubtitle}>
-            Stunning Design Templates for{'\n'}Cricut Machine
-          </Text>
+          <Text style={styles.cardSubtitle}>{tool.subtitle}</Text>
           <Pressable onPress={() => onPress?.(tool.id)} style={styles.exploreButton}>
-<<<<<<< HEAD
             <Text style={[styles.exploreLabel, {color: tool.exploreColor}]}>Explore</Text>
-            <Text style={[styles.exploreArrow, {color: tool.exploreColor}]}>{'>'}</Text>
+            <Text style={[styles.exploreArrow, {color: tool.exploreColor}]}>{'\u2192'}</Text>
           </Pressable>
         </View>
         <ToolShowcase
-          ShowcaseArt={tool.ShowcaseArt}
-          showcaseHeight={tool.showcaseHeight}
-          showcaseWidth={tool.showcaseWidth}
-=======
-            <Text style={styles.exploreLabel}>Explore</Text>
-            <Text style={styles.exploreArrow}>{'>'}</Text>
-          </Pressable>
-        </View>
-        <ToolShowcase
-          MainPreview={tool.MainPreview}
-          SmallPreview={tool.SmallPreview}
-          largeFrame={tool.largeFrame}
-          smallFrame={tool.smallFrame}
->>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
+          CellArt={tool.CellArt}
+          artHeight={tool.artHeight}
+          artWidth={tool.artWidth}
         />
       </View>
     </Pressable>
@@ -271,16 +202,12 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   cardSurface: {
-    minHeight: 118,
+    minHeight: 128,
     borderRadius: 12,
     overflow: 'hidden',
-<<<<<<< HEAD
     paddingLeft: 10,
     paddingRight: 8,
-=======
-    paddingHorizontal: 10,
->>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
-    paddingVertical: 12,
+    paddingVertical: 14,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -296,6 +223,7 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: {
     marginTop: 3,
+    maxWidth: 168,
     fontSize: 10.5,
     lineHeight: 12,
     color: 'rgba(255,255,255,0.92)',
@@ -316,70 +244,20 @@ const styles = StyleSheet.create({
     fontSize: 9.5,
     lineHeight: 11,
     fontWeight: '700',
-<<<<<<< HEAD
-=======
-    color: '#F06B62',
->>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
   },
   exploreArrow: {
     marginLeft: 3,
     fontSize: 10,
     lineHeight: 11,
-<<<<<<< HEAD
     fontWeight: '700',
   },
   showcaseWrap: {
-    width: 136,
-    height: 96,
-    marginLeft: 6,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
-=======
-    color: '#F06B62',
-    fontWeight: '700',
-  },
-  showcaseWrap: {
-    width: 88,
-    height: 94,
-    position: 'relative',
+    width: 132,
+    minHeight: 100,
     marginLeft: 8,
-  },
-  largeTile: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    width: 44,
-    height: 94,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  smallTile: {
-    position: 'absolute',
-    width: 26,
-    height: 40,
-    borderRadius: 7,
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  smallTileLeft: {
-    left: 10,
-    bottom: 0,
-    transform: [{rotate: '-18deg'}],
-  },
-  smallTileCenter: {
-    left: 30,
-    bottom: 2,
-  },
-  smallTileCenterSurface: {
-    backgroundColor: '#FFFFFF',
-  },
->>>>>>> 33f05fe511af5d67a545c276419a36ca17d4a7f6
 });
 
 export default AiTools;
